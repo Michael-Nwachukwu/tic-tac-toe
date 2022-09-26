@@ -1,0 +1,163 @@
+
+*, *::after, *::before {
+    box-sizing: border-box;
+  }
+  
+  /* root vars */
+  :root {
+      /* cell size for both width and height */
+    --cell-size: 100px; 
+    /* mark size for X's and O's, we want it to be 60% of the cell size*/
+    --mark-size: calc(var(--cell-size) * .6);
+  }
+  
+  body {
+    margin: 0;
+    background: #e0e0e0;
+
+  }
+
+  .board {
+    width: 30rem;
+    height: 60vh;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
+    border-radius: 50px;
+    background: #e0e0e0;
+    margin: auto;
+    margin-top: 10em;
+    box-shadow: 11px 11px 37px #b3b3b3, -11px -11px 37px #ffffff;
+  }
+  
+  .cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 20px;
+    background: #e0e0e0;
+    box-shadow: inset 9px 9px 21px #a8a8a8, inset -9px -9px 21px #ffffff;
+    margin: 5px;
+  }
+  
+/* if you hover over an x-cell or a circle-cell ie a cell that already has an element in it the cursor will be- not allowed  */
+  .cell.x,
+  .cell.circle {
+    cursor: not-allowed;
+  }
+  
+  /* setting actual color of x b4 and after and the outer circle(b4) to black */
+  .cell.x::before,
+  .cell.x::after,
+  .cell.circle::before {
+    background-color: black;
+  }
+  
+  /* changing the color of hover x and o to lightgrey */
+  .board.x .cell:not(.x):not(.circle):hover::before,
+  .board.x .cell:not(.x):not(.circle):hover::after,
+  .board.circle .cell:not(.x):not(.circle):hover::before {
+    background-color: lightgrey;
+  }
+  
+  /* creating the X mark ( not-hover = only apply this hover effect on x and circle cells when we do not have an x or a circle inside ) */
+  .cell.x::before,
+  .cell.x::after,
+  .board.x .cell:not(.x):not(.circle):hover::before,
+  .board.x .cell:not(.x):not(.circle):hover::after {
+
+    /* make content empty */
+    content: '';
+
+    /* position it absolute to make it look better after the transformation */
+    position: absolute;
+
+    /* make the x mark width 15% of the mark size */
+    width: calc(var(--mark-size) * .15);
+
+    /* height = marksize */
+    height: var(--mark-size);
+  }
+  
+  /* rotating on part of X */
+  .cell.x::before,
+  .board.x .cell:not(.x):not(.circle):hover::before {
+    transform: rotate(45deg);
+  }
+  
+  /* rotating other part of X */
+  .cell.x::after,
+  .board.x .cell:not(.x):not(.circle):hover::after {
+    transform: rotate(-45deg);
+  }
+  
+
+  /* getting the circle shape (not-circle-hover =  when we're on a board that has the circle class we wanna get the cells inside that re not already a circle ) */
+  .cell.circle::before,
+  .cell.circle::after,
+  .board.circle .cell:not(.x):not(.circle):hover::before,
+  .board.circle .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+  }
+  
+  .cell.circle::before,
+  .board.circle .cell:not(.x):not(.circle):hover::before {
+    width: var(--mark-size);
+    height: var(--mark-size);
+  }
+  
+  .cell.circle::after,
+  .board.circle .cell:not(.x):not(.circle):hover::after {
+
+    /* width and heigh of the after pseudo will be 70% of the mark size */
+    width: calc(var(--mark-size) * .7);
+    height: calc(var(--mark-size) * .7);
+    background-color: white;
+  }
+  
+
+  /* winning modal */
+  .winning-message {
+      /* display will be visible when game ends */
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* black with 90% transparency */
+    background-color: rgba(0, 0, 0, .9);
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 5rem;
+    flex-direction: column;
+  }
+  
+  .winning-message button {
+    font-size: 3rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    cursor: pointer;
+  }
+  
+  .winning-message button:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+  }
+  
+  /* class of show will be applied at the end of game */
+  .winning-message.show {
+    display: flex;
+  }
